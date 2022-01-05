@@ -17,11 +17,13 @@ public class Scan {
                 workers.put(temp + i, "4028");
                 System.out.println(temp + i +":4028");
             }
+            /*
             else if(API.ping(temp + i, "80"))
             {
                 workers.put(temp + i, "80");
                 System.out.println(temp + i +":80");
             }
+            */
         }
         String command = "stats";//stats pools summary
         String ip = "192.168.52.2" ;
