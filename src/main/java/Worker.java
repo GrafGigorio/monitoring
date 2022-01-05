@@ -7,5 +7,6 @@ public class Worker {
 
     public Pools pools;
     public BMMiner miner;
+    public Hardware hardware;
 
 }

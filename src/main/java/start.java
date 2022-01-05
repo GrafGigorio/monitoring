@@ -12,12 +12,12 @@ public class start {
     public static void main(String[] args) throws Exception {
 
 
-        String command = "stats";//stats pools summary
+        String command = "summary";//stats pools summary
         String ip = "192.168.52.4" ;
         String port = "4028";
 
         new API(command, ip, port);
-        Scan.start();
+       // Scan.start();
 
 
 /*

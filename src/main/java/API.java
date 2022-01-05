@@ -21,6 +21,7 @@ class API
     {
         String value;
         String name;
+        StringBuilder resp =new StringBuilder();
         String[] sections = result.split("\\|", 0);
 
         for (int i = 0; i < sections.length; i++)
@@ -40,9 +41,9 @@ class API
                             name = nameval[0] + nameval[1];
                         else
                             name = nameval[0];
-                        System.out.println();
-                        System.out.println("[" + name + "] =>");
-                        System.out.println("(");
+                        resp.append("\n");
+                        resp.append("\"" + (name == "" ? "ept" : name) + "\":[\n");
+                        resp.append("   {\n");
                     }
 
                     if (nameval.length > 1)
@@ -56,11 +57,14 @@ class API
                         value = nameval[0];
                     }
 
-                    System.out.println("   ["+name+"] => "+value);
+                    resp.append("      \""+name.replace(" ", "_")+"\": \""+value+"\",\n");
                 }
-                System.out.println(")");
+                resp.replace(resp.length()-2,resp.length()-1,"");
+                resp.append("   }\n],");
             }
         }
+        resp.replace(resp.length()-1,resp.length(),"");
+        System.out.println(resp.toString());
     }
 
     public void process(String cmd, InetAddress ip, int port) throws Exception
