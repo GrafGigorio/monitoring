@@ -1,5 +1,8 @@
+import Worker.objects.Hardware;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -12,13 +15,20 @@ public class start {
     public static void main(String[] args) throws Exception {
 
 
-        String command = "summary";//stats pools summary
+        String command = "stats";//stats pools summary
         String ip = "192.168.52.4" ;
         String port = "4028";
 
-        new API(command, ip, port);
-       // Scan.start();
+        API ddr = new API(command, ip, port);
+        System.out.println(ddr.resp);
 
+        JSONObject json = new JSONObject(ddr.resp);
+
+        String obj = json.getJSONObject("ept").toString();
+
+        Hardware hw = new ObjectMapper().readValue(obj, Hardware.class);
+       // Scan.start();
+        System.out.println();
 
 /*
         String addr = "http://192.168.52.7:/cgi-bin/miner_summary.cgi";

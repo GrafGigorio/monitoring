@@ -1,9 +1,15 @@
 package Worker.objects;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.beans.ConstructorProperties;
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Hardware {
-    public String GHS_5s;
-    public String GHS_av;
-    public String GHS_30m;
+    public int GHS_5s;
+    public int GHS_av;
+    public int GHS_30m;
 
     public short fan1;
     public short fan2;
@@ -55,6 +61,47 @@ public class Hardware {
 
     public String miner_id;
 
+    @ConstructorProperties({
+            "GHS_5s",
+             "GHS_av",
+             "GHS_30m",
+             "fan1",
+             "fan2",
+             "fan3",
+             "fan4",
+             "temp1",
+             "temp2",
+             "temp3",
+             "temp2_1",
+             "temp2_2",
+             "temp2_3",
+             "temp3_1",
+             "temp3_2",
+             "temp3_3",
+             "temp_pcb1",
+             "temp_pcb2",
+             "temp_pcb3",
+             "temp_chip1",
+             "temp_chip2",
+             "temp_chip3",
+             "total_rateideal",
+             "total_rate",
+             "chain_acn1",
+             "chain_acn2",
+             "chain_acn3",
+             "chain_acs1",
+             "chain_acs2",
+             "chain_acs3",
+             "chain_hw1",
+             "chain_hw2",
+             "chain_hw3",
+             "chain_rate1",
+             "chain_rate2",
+             "chain_rate3",
+             "freq1",
+             "freq2",
+             "freq3",
+             "miner_id"})
     public Hardware(String GHS_5s,
                     String GHS_av,
                     String GHS_30m,
@@ -96,9 +143,9 @@ public class Hardware {
                     String freq3,
                     String miner_id) {
 
-        this.GHS_5s = GHS_5s;
-        this.GHS_av = GHS_av;
-        this.GHS_30m = GHS_30m;
+        this.GHS_5s = (int)(Double.parseDouble(GHS_5s) * 1000);
+        this.GHS_av = (int)(Double.parseDouble(GHS_av) * 1000);;
+        this.GHS_30m = (int)(Double.parseDouble(GHS_30m) * 1000);;
 
         this.fan1 = Short.parseShort(fan1);
         this.fan2 = Short.parseShort(fan2);
@@ -125,8 +172,8 @@ public class Hardware {
         this.temp_chip2 = temp_chip2;
         this.temp_chip3 = temp_chip3;
 
-        this.total_rateideal = Integer.parseInt(total_rateideal);
-        this.total_rate = Integer.parseInt(total_rate);
+        this.total_rateideal = (int)(Double.parseDouble(total_rateideal) * 1000);
+        this.total_rate = (int)(Double.parseDouble(total_rate) * 1000);
 
         this.chain_acn1 = (short) Integer.parseInt(chain_acn1);
         this.chain_acn2 = (short) Integer.parseInt(chain_acn2);
@@ -140,9 +187,9 @@ public class Hardware {
         this.chain_hw2 = Integer.parseInt(chain_hw2);
         this.chain_hw3 = Integer.parseInt(chain_hw3);
 
-        this.chain_rate1 = Integer.parseInt(chain_rate1);
-        this.chain_rate2 = Integer.parseInt(chain_rate2);
-        this.chain_rate3 = Integer.parseInt(chain_rate3);
+        this.chain_rate1 = (int)(Double.parseDouble(chain_rate1) * 1000);
+        this.chain_rate2 = (int)(Double.parseDouble(chain_rate2) * 1000);
+        this.chain_rate3 = (int)(Double.parseDouble(chain_rate3) * 1000);
 
         this.freq1 = Integer.parseInt(freq1);
         this.freq2 = Integer.parseInt(freq2);
@@ -151,15 +198,15 @@ public class Hardware {
         this.miner_id = miner_id;
     }
 
-    public String getGHS_5s() {
+    public int getGHS_5s() {
         return GHS_5s;
     }
 
-    public String getGHS_av() {
+    public int getGHS_av() {
         return GHS_av;
     }
 
-    public String getGHS_30m() {
+    public int getGHS_30m() {
         return GHS_30m;
     }
 

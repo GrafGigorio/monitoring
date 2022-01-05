@@ -4,6 +4,7 @@ import java.io.*;
 
 class API
 {
+    public String resp;
     static private final int MAXRECEIVESIZE = 65535;
 
     static private Socket socket = null;
@@ -17,11 +18,11 @@ class API
         }
     }
 
-    public void display(String result) throws Exception
+    public String display(String result) throws Exception
     {
         String value;
         String name;
-        StringBuilder resp =new StringBuilder();
+        StringBuilder resp =new StringBuilder("{");
         String[] sections = result.split("\\|", 0);
 
         for (int i = 0; i < sections.length; i++)
@@ -42,7 +43,7 @@ class API
                         else
                             name = nameval[0];
                         resp.append("\n");
-                        resp.append("\"" + (name == "" ? "ept" : name) + "\":[\n");
+                        resp.append("\"" + (name == "" ? "ept" : name) + "\":\n");
                         resp.append("   {\n");
                     }
 
@@ -56,18 +57,24 @@ class API
                         name = "" + j;
                         value = nameval[0];
                     }
-
-                    resp.append("      \""+name.replace(" ", "_")+"\": \""+value+"\",\n");
+                    if(     !value.equals("") &&
+                            !value.equals("0") &&
+                            !value.equals("0-0-0-0") &&
+                            !value.equals("0.00") &&
+                            !value.equals("0.000000")&&
+                            !value.equals("{}"))
+                        resp.append("      \""+name.replace(" ", "_")+"\": \""+value+"\",\n");
                 }
                 resp.replace(resp.length()-2,resp.length()-1,"");
-                resp.append("   }\n],");
+                resp.append("   },");
             }
         }
         resp.replace(resp.length()-1,resp.length(),"");
-        System.out.println(resp.toString());
+        resp.append("\n}");
+        return resp.toString();
     }
 
-    public void process(String cmd, InetAddress ip, int port) throws Exception
+    public String process(String cmd, InetAddress ip, int port) throws Exception
     {
         StringBuffer sb = new StringBuffer();
         char buf[] = new char[MAXRECEIVESIZE];
@@ -102,14 +109,14 @@ class API
         {
             System.err.println(ioe.toString());
             closeAll();
-            return;
+            return null;
         }
 
         String result = sb.toString();
 
         System.out.println("Answer='"+result+"'");
 
-        display(result);
+        return display(result);
     }
 
     public API(String command, String _ip, String _port) throws Exception
@@ -137,7 +144,7 @@ class API
             return;
         }
 
-        process(command, ip, port);
+        this.resp = process(command, ip, port).replace(" ","").replace("\n", "");
     }
 
     public static boolean ping(String _ip, String _port)
