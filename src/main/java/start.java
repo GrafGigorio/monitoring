@@ -24,7 +24,7 @@ public class start {
 
 
 
-        Scan.start();
+        List<Worker> workers = new Scan().start();
         System.out.println();
 
 /*

@@ -105,7 +105,7 @@ class API
         {
             //socket = new Socket(ip, port);
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, port), 100);
+            socket.connect(new InetSocketAddress(ip, port), 200);
 
             PrintStream ps = new PrintStream(socket.getOutputStream());
             ps.print(cmd.toCharArray());
@@ -134,9 +134,9 @@ class API
 
         String result = sb.toString();
 
-        System.out.println();
-        System.out.println("Answer='"+result+"'");
-        System.out.println();
+//        System.out.println();
+//        System.out.println("Answer='"+result+"'");
+//        System.out.println();
         return display(result);
     }
 
@@ -197,7 +197,7 @@ class API
 
         try {
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, port), 100);
+            socket.connect(new InetSocketAddress(ip, port), 200);
             socket.close();
         } catch (SocketTimeoutException e) {
 

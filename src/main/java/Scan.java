@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Scan {
-    public static void start()
-    {
+    private String wrType ="";
+    public List<Worker> start() throws Exception {
         List<Worker> workers = new ArrayList<>();
         for (int i = 2; i < 20; i++) {
             String temp = "192.168.52.";
@@ -31,44 +31,49 @@ public class Scan {
         {
             try {
                 String html = Jsoup.connect("http://"+wr.getIp()).get().html();
-                System.out.println();
-                System.out.println(wr.getIp());
-                System.out.println(html);
+               // System.out.println();
+                System.out.println(wr.getIp() + "Wats");
+                //System.out.println(html);
                 wr.setType("WatsMiner");
             } catch (IOException e1) {
                 if(e1.getMessage().contains("HTTP error fetching URL"))
                 {
-                    wr.setType("AntMiner");
-                    try {
-                        API send = new API("stats", wr.getIp(), wr.getPort());
-                        System.out.println();
-                        System.out.println(send.resp);
-                        System.out.println();
-                        wr.setHardware(new ObjectMapper().readValue(new JSONObject(send.resp).getJSONArray("main").getJSONObject(2).toString(), Hardware.class));//BMMiner1.0.0
-                        //wr.setMiner(new ObjectMapper().readValue(new JSONObject(send.resp).getJSONObject("BMMiner1.0.0").toString(), BMMiner.class));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
 
-                    try {
-                        API send = new API("pools", wr.getIp(), wr.getPort());
-                        List<Pool> pools = new ArrayList<>();
-                        System.out.println();
-                        System.out.println(send.resp);
-                        System.out.println();
-                        pools.add(new ObjectMapper().readValue(new JSONObject(send.resp).getJSONArray("main").getJSONObject(1).toString(), Pool.class));
-                        pools.add(new ObjectMapper().readValue(new JSONObject(send.resp).getJSONArray("main").getJSONObject(2).toString(), Pool.class));
-                        pools.add(new ObjectMapper().readValue(new JSONObject(send.resp).getJSONArray("main").getJSONObject(3).toString(), Pool.class));
-                        wr.setPools(pools);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+                    wr.setHardware(getHardware(wr.getIp(),wr.getPort()));
+                    wr.setType(wrType);
+                    wr.setPools(getPolls(wr.getIp(),wr.getPort()));
+
                     wr.setName(wr.getPools().get(0).workerName);
                 }
             }
         }
+        return workers;
     }
-    //private static
+    private Hardware getHardware(String ip,String port) throws Exception {
+        try {
+            API send = new API("stats", ip, port);
+            JSONArray json = new JSONObject(send.resp).getJSONArray("main");
+            wrType = json.getJSONObject(1).getString("Type").toString();
+            return new ObjectMapper().readValue(json.getJSONObject(2).toString(), Hardware.class);//BMMiner1.0.0
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    private List<Pool> getPolls(String ip,String port) throws Exception {
+        try {
+            API send = new API("pools", ip, port);
+            List<Pool> pools = new ArrayList<>();
+
+            JSONArray json = new JSONObject(send.resp).getJSONArray("main");
+            pools.add(new ObjectMapper().readValue(json.getJSONObject(1).toString(), Pool.class));
+            pools.add(new ObjectMapper().readValue(json.getJSONObject(2).toString(), Pool.class));
+            pools.add(new ObjectMapper().readValue(json.getJSONObject(3).toString(), Pool.class));
+            return pools;
+        } catch (Exception e) {
+           throw new Exception(e.getMessage());
+        }
+    }
 }
 /*
         String command = "pools";//stats pools summary
