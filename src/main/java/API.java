@@ -17,12 +17,20 @@ class API
             socket = null;
         }
     }
+    private static void closeAlld() throws Exception
+    {
+        if (socket != null)
+        {
+            socket.close();
+            socket = null;
+        }
+    }
 
     public String display(String result) throws Exception
     {
         String value;
         String name;
-        StringBuilder resp =new StringBuilder("{");
+        StringBuilder resp =new StringBuilder("{\"main\":[");
         String[] sections = result.split("\\|", 0);
 
         for (int i = 0; i < sections.length; i++)
@@ -43,7 +51,7 @@ class API
                         else
                             name = nameval[0];
                         resp.append("\n");
-                        resp.append("\"" + (name == "" ? "ept" : name) + "\":\n");
+//                        resp.append("\"" + (name == "" ? "ept" : name) + "\":\n");
                         resp.append("   {\n");
                     }
 
@@ -63,15 +71,26 @@ class API
                             !value.equals("0.00") &&
                             !value.equals("0.000000")&&
                             !value.equals("{}"))
-                        resp.append("      \""+name.replace(" ", "_")+"\": \""+value+"\",\n");
+                        resp.append("      \""+name.replace(" ", "_")+"\": \""+value.
+                                replace(" ", "_")+"\",\n");
                 }
                 resp.replace(resp.length()-2,resp.length()-1,"");
                 resp.append("   },");
             }
         }
         resp.replace(resp.length()-1,resp.length(),"");
-        resp.append("\n}");
-        return resp.toString();
+        resp.append("\n]}");
+        String rq = resp.toString();
+
+        rq = rq.replace("freq_avg1","freq1");
+        rq = rq.replace("freq_avg2","freq2");
+        rq = rq.replace("freq_avg3","freq3");
+
+//        rq.replace("freq1","freq_avg1");
+//        rq.replace("freq2","freq_avg2");
+//        rq.replace("freq3","freq_avg3");
+
+        return rq;
     }
 
     public String process(String cmd, InetAddress ip, int port) throws Exception
@@ -86,13 +105,14 @@ class API
         {
             //socket = new Socket(ip, port);
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, port), 1000);
+            socket.connect(new InetSocketAddress(ip, port), 100);
 
             PrintStream ps = new PrintStream(socket.getOutputStream());
             ps.print(cmd.toCharArray());
             ps.flush();
 
             InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+
             while (0x80085 > 0)
             {
                 len = isr.read(buf, 0, MAXRECEIVESIZE);
@@ -114,8 +134,9 @@ class API
 
         String result = sb.toString();
 
+        System.out.println();
         System.out.println("Answer='"+result+"'");
-
+        System.out.println();
         return display(result);
     }
 
@@ -151,7 +172,9 @@ class API
     {
         InetAddress ip;
         int port;
-
+        int len = 0;
+        char buf[] = new char[MAXRECEIVESIZE];
+        StringBuffer sb = new StringBuffer();
         try
         {
             ip = InetAddress.getByName(_ip);
@@ -182,6 +205,8 @@ class API
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return  true;
     }

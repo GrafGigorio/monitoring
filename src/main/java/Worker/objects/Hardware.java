@@ -1,7 +1,6 @@
 package Worker.objects;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.beans.ConstructorProperties;
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -9,7 +8,6 @@ import java.beans.ConstructorProperties;
 public class Hardware {
     public int GHS_5s;
     public int GHS_av;
-    public int GHS_30m;
 
     public short fan1;
     public short fan2;
@@ -23,10 +21,6 @@ public class Hardware {
     public byte temp2_1;
     public byte temp2_2;
     public byte temp2_3;
-
-    public byte temp3_1;
-    public byte temp3_2;
-    public byte temp3_3;
 
     public String temp_pcb1;
     public String temp_pcb2;
@@ -59,12 +53,10 @@ public class Hardware {
     public int freq2;
     public int freq3;
 
-    public String miner_id;
 
     @ConstructorProperties({
             "GHS_5s",
              "GHS_av",
-             "GHS_30m",
              "fan1",
              "fan2",
              "fan3",
@@ -75,9 +67,6 @@ public class Hardware {
              "temp2_1",
              "temp2_2",
              "temp2_3",
-             "temp3_1",
-             "temp3_2",
-             "temp3_3",
              "temp_pcb1",
              "temp_pcb2",
              "temp_pcb3",
@@ -104,7 +93,6 @@ public class Hardware {
              "miner_id"})
     public Hardware(String GHS_5s,
                     String GHS_av,
-                    String GHS_30m,
                     String fan1,
                     String fan2,
                     String fan3,
@@ -115,9 +103,6 @@ public class Hardware {
                     String temp2_1,
                     String temp2_2,
                     String temp2_3,
-                    String temp3_1,
-                    String temp3_2,
-                    String temp3_3,
                     String temp_pcb1,
                     String temp_pcb2,
                     String temp_pcb3,
@@ -140,29 +125,23 @@ public class Hardware {
                     String chain_rate3,
                     String freq1,
                     String freq2,
-                    String freq3,
-                    String miner_id) {
+                    String freq3) {
 
         this.GHS_5s = (int)(Double.parseDouble(GHS_5s) * 1000);
         this.GHS_av = (int)(Double.parseDouble(GHS_av) * 1000);;
-        this.GHS_30m = (int)(Double.parseDouble(GHS_30m) * 1000);;
 
         this.fan1 = Short.parseShort(fan1);
         this.fan2 = Short.parseShort(fan2);
         this.fan3 = Short.parseShort(fan3);
         this.fan4 = Short.parseShort(fan4);
 
-        this.temp1 = (byte) Integer.parseInt(temp1);
-        this.temp2 = (byte) Integer.parseInt(temp2);
-        this.temp3 = (byte) Integer.parseInt(temp3);
+        this.temp1 = (byte) Integer.parseInt(temp1);//
+        this.temp2 = (byte) Integer.parseInt(temp2);//
+        this.temp3 = (byte) Integer.parseInt(temp3);//
 
-        this.temp2_1 = (byte) Integer.parseInt(temp2_1);
-        this.temp2_2 = (byte) Integer.parseInt(temp2_2);
-        this.temp2_3 = (byte) Integer.parseInt(temp2_3);
-
-        this.temp3_1 = (byte) Integer.parseInt(temp3_1);
-        this.temp3_2 = (byte) Integer.parseInt(temp3_2);
-        this.temp3_3 = (byte) Integer.parseInt(temp3_3);
+        this.temp2_1 = (byte) Integer.parseInt(temp2_1);//
+        this.temp2_2 = (byte) Integer.parseInt(temp2_2);//
+        this.temp2_3 = (byte) Integer.parseInt(temp2_3);//
 
         this.temp_pcb1 = temp_pcb1;
         this.temp_pcb2 = temp_pcb2;
@@ -191,11 +170,9 @@ public class Hardware {
         this.chain_rate2 = (int)(Double.parseDouble(chain_rate2) * 1000);
         this.chain_rate3 = (int)(Double.parseDouble(chain_rate3) * 1000);
 
-        this.freq1 = Integer.parseInt(freq1);
-        this.freq2 = Integer.parseInt(freq2);
-        this.freq3 = Integer.parseInt(freq3);
-
-        this.miner_id = miner_id;
+        this.freq1 = Integer.parseInt(freq1.split("\\.")[0]);
+        this.freq2 = Integer.parseInt(freq2.split("\\.")[0]);
+        this.freq3 = Integer.parseInt(freq3.split("\\.")[0]);
     }
 
     public int getGHS_5s() {
@@ -204,10 +181,6 @@ public class Hardware {
 
     public int getGHS_av() {
         return GHS_av;
-    }
-
-    public int getGHS_30m() {
-        return GHS_30m;
     }
 
     public short getFan1() {
@@ -248,18 +221,6 @@ public class Hardware {
 
     public byte getTemp2_3() {
         return temp2_3;
-    }
-
-    public byte getTemp3_1() {
-        return temp3_1;
-    }
-
-    public byte getTemp3_2() {
-        return temp3_2;
-    }
-
-    public byte getTemp3_3() {
-        return temp3_3;
     }
 
     public String getTemp_pcb1() {
@@ -352,9 +313,5 @@ public class Hardware {
 
     public int getFreq3() {
         return freq3;
-    }
-
-    public String getMiner_id() {
-        return miner_id;
     }
 }

@@ -1,4 +1,11 @@
 package Worker.objects;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.beans.ConstructorProperties;
+
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class BMMiner {
 
@@ -6,13 +13,14 @@ public class BMMiner {
     private String Miner;
     private String CompileTime;
     private String Type;
-
-    public BMMiner(String BMMiner, String miner, String compileTime, String type) {
-        this.BMMiner = BMMiner;
+    @ConstructorProperties({"BMMiner","Miner","CompileTime","Type"})
+    public BMMiner(String bmminer, String miner, String compileTime, String type) {
+        BMMiner = bmminer;
         Miner = miner;
         CompileTime = compileTime;
         Type = type;
     }
+
 
     public String getBMMiner() {
         return BMMiner;

@@ -15,16 +15,16 @@ public class start {
     public static void main(String[] args) throws Exception {
 
 
-        String command = "pools";//stats pools summary
+        String command = "stats";//stats pools summary
         String ip = "192.168.52.4" ;
         String port = "4028";
 
-        API ddr = new API(command, ip, port);
-        System.out.println(ddr.resp);
+       // API ddr = new API(command, ip, port);
+      //  System.out.println(ddr.resp);
 
 
-        Hardware hw = new ObjectMapper().readValue(new JSONObject(ddr.resp).getJSONObject("ept").toString(), Hardware.class);
-       // Scan.start();
+
+        Scan.start();
         System.out.println();
 
 /*
