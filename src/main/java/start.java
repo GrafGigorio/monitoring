@@ -1,14 +1,3 @@
-import Worker.objects.Hardware;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class start {
@@ -19,12 +8,26 @@ public class start {
         String ip = "192.168.52.4" ;
         String port = "4028";
 
-       // API ddr = new API(command, ip, port);
-      //  System.out.println(ddr.resp);
-
+//        API ddr = new API(command, ip, port);
+//        System.out.println(ddr.resp);
+        String DB_URL = "jdbc:postgresql://10.11.11.51:5432/AntGet";
+        String DB_Driver = "org.h2.Driver";
 
 
         List<Worker> workers = new Scan().start();
+
+        SQL sq = new SQL(DB_URL,DB_Driver);
+
+        for(Worker worker : workers)
+        {
+            sq.addWorker(worker);
+        }
+        //sq.commit();
+
+
+        String  ddd =sq.getWorckers();
+        System.out.println();
+        System.out.println(ddd);
         System.out.println();
 
 /*

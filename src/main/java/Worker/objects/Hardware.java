@@ -162,9 +162,9 @@ public class Hardware {
         this.chain_acs2 = chain_acs2;
         this.chain_acs3 = chain_acs3;
 
-        this.chain_hw1 = Integer.parseInt(chain_hw1);
-        this.chain_hw2 = Integer.parseInt(chain_hw2);
-        this.chain_hw3 = Integer.parseInt(chain_hw3);
+        this.chain_hw1 = chain_hw1 == null ? 0 : Integer.parseInt(chain_hw1);
+        this.chain_hw2 = chain_hw2 == null ? 0 : Integer.parseInt(chain_hw2);
+        this.chain_hw3 = chain_hw3 == null ? 0 : Integer.parseInt(chain_hw3);
 
         this.chain_rate1 = (int)(Double.parseDouble(chain_rate1) * 1000);
         this.chain_rate2 = (int)(Double.parseDouble(chain_rate2) * 1000);

@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class Scan {
     private String wrType ="";
+
     public List<Worker> start() throws Exception {
         List<Worker> workers = new ArrayList<>();
         for (int i = 2; i < 20; i++) {
@@ -38,8 +39,6 @@ public class Scan {
             } catch (IOException e1) {
                 if(e1.getMessage().contains("HTTP error fetching URL"))
                 {
-
-
                     wr.setHardware(getHardware(wr.getIp(),wr.getPort()));
                     wr.setType(wrType);
                     wr.setPools(getPolls(wr.getIp(),wr.getPort()));
@@ -50,16 +49,16 @@ public class Scan {
         }
         return workers;
     }
+
     private Hardware getHardware(String ip,String port) throws Exception {
-        try {
-            API send = new API("stats", ip, port);
+        API send = null;
+
+            send = new API("stats", ip, port);
             JSONArray json = new JSONObject(send.resp).getJSONArray("main");
             wrType = json.getJSONObject(1).getString("Type").toString();
             return new ObjectMapper().readValue(json.getJSONObject(2).toString(), Hardware.class);//BMMiner1.0.0
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
     }
+
     private List<Pool> getPolls(String ip,String port) throws Exception {
         try {
             API send = new API("pools", ip, port);

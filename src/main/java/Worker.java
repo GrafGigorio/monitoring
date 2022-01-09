@@ -1,4 +1,5 @@
 import Worker.objects.*;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Worker {
     public void setName(String name) {
         this.name = name;
     }
-
+    @JsonValue
     public List<Pool> getPools() {
         return pools;
     }

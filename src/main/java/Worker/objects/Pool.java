@@ -2,16 +2,20 @@ package Worker.objects;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.beans.ConstructorProperties;
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Pool {
-    @JsonRawValue
+    @JsonSerialize
     public String URL;
+    @JsonSerialize
     public String user;
+    @JsonSerialize
     public String workerName;
+    @JsonSerialize
     public String pool1Status;
 
     @ConstructorProperties({"URL", "User", "Status"})
