@@ -43,7 +43,7 @@ public class Scan {
                     wr.setType(wrType);
                     wr.setPools(getPolls(wr.getIp(),wr.getPort()));
 
-                    wr.setName(wr.getPools().get(0).workerName);
+                    wr.setName(wr.getPools().get(0).user.split("\\.")[1]);
                 }
             }
         }
@@ -56,7 +56,9 @@ public class Scan {
             send = new API("stats", ip, port);
             JSONArray json = new JSONObject(send.resp).getJSONArray("main");
             wrType = json.getJSONObject(1).getString("Type").toString();
-            return new ObjectMapper().readValue(json.getJSONObject(2).toString(), Hardware.class);//BMMiner1.0.0
+            Hardware wt = new ObjectMapper().readValue(json.getJSONObject(2).toString(), Hardware.class);
+            wt.setVersion(json.getJSONObject(1).toString());
+            return  wt;
     }
 
     private List<Pool> getPolls(String ip,String port) throws Exception {

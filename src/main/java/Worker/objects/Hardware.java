@@ -1,11 +1,17 @@
 package Worker.objects;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.beans.ConstructorProperties;
+import java.security.PublicKey;
+
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Hardware {
+    @JsonIgnore
+    public String version;
+
     public int GHS_5s;
     public int GHS_av;
 
@@ -166,9 +172,9 @@ public class Hardware {
         this.chain_hw2 = chain_hw2 == null ? 0 : Integer.parseInt(chain_hw2);
         this.chain_hw3 = chain_hw3 == null ? 0 : Integer.parseInt(chain_hw3);
 
-        this.chain_rate1 = (int)(Double.parseDouble(chain_rate1) * 1000);
-        this.chain_rate2 = (int)(Double.parseDouble(chain_rate2) * 1000);
-        this.chain_rate3 = (int)(Double.parseDouble(chain_rate3) * 1000);
+        this.chain_rate1 = chain_rate1== null ? 0 : (int)(Double.parseDouble(chain_rate1) * 1000);
+        this.chain_rate2 = chain_rate2== null ? 0 : (int)(Double.parseDouble(chain_rate2) * 1000);
+        this.chain_rate3 = chain_rate3== null ? 0 : (int)(Double.parseDouble(chain_rate3) * 1000);
 
         this.freq1 = Integer.parseInt(freq1.split("\\.")[0]);
         this.freq2 = Integer.parseInt(freq2.split("\\.")[0]);
@@ -313,5 +319,13 @@ public class Hardware {
 
     public int getFreq3() {
         return freq3;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }
