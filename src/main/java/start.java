@@ -5,6 +5,20 @@ public class start {
         String DB_URL = "jdbc:postgresql://10.11.11.51:5432/AntGet";
         String DB_Driver = "org.h2.Driver";
 
+        boolean getDataTask = false;
+        int sleepTask = 1000;
+
+        Runnable task = () -> {
+            while (getDataTask)
+            {
+
+                try {
+                    Thread.sleep(sleepTask);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         List<Worker> workers = new Scan().start();
 
@@ -23,3 +37,4 @@ public class start {
 
     }
 }
+

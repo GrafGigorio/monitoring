@@ -1,9 +1,12 @@
 package Worker.objects;
+import Worker.objects.HWobj.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.beans.ConstructorProperties;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonAutoDetect
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -15,26 +18,9 @@ public class Hardware {
     public int GHS_5s;
     public int GHS_av;
 
-    public short fan1;
-    public short fan2;
-    public short fan3;
-    public short fan4;
+    public List<Fan> fans = new ArrayList<>();
 
-    public byte temp1;
-    public byte temp2;
-    public byte temp3;
-
-    public byte temp2_1;
-    public byte temp2_2;
-    public byte temp2_3;
-
-    public String temp_pcb1;
-    public String temp_pcb2;
-    public String temp_pcb3;
-
-    public String temp_chip1;
-    public String temp_chip2;
-    public String temp_chip3;
+    public Temperatures temperatures = new Temperatures();
 
     public int total_rateideal;
     public int total_rate;
@@ -47,13 +33,9 @@ public class Hardware {
     public String chain_acs2;
     public String chain_acs3;
 
-    public int chain_hw1;//Аппаратные ошибки по лезвию
-    public int chain_hw2;
-    public int chain_hw3;
+    public List<ChainHW> chainHWS = new ArrayList<>();//Аппаратные ошибки по лезвию
 
-    public int chain_rate1;//Текущий рэйт лезвия
-    public int chain_rate2;
-    public int chain_rate3;
+    public List<ChainRate> rates = new ArrayList<>();//Текущий рэйт лезвий
 
     public int freq1;//Частота лезвия
     public int freq2;
@@ -136,26 +118,26 @@ public class Hardware {
         this.GHS_5s = (int)(Double.parseDouble(GHS_5s) * 1000);
         this.GHS_av = (int)(Double.parseDouble(GHS_av) * 1000);;
 
-        this.fan1 = Short.parseShort(fan1);
-        this.fan2 = Short.parseShort(fan2);
-        this.fan3 = Short.parseShort(fan3);
-        this.fan4 = Short.parseShort(fan4);
+        this.fans.add( new Fan(Short.parseShort(fan1)));
+        this.fans.add( new Fan(Short.parseShort(fan2)));
+        this.fans.add( new Fan(Short.parseShort(fan3)));
+        this.fans.add( new Fan(Short.parseShort(fan4)));
 
-        this.temp1 = (byte) Integer.parseInt(temp1);//
-        this.temp2 = (byte) Integer.parseInt(temp2);//
-        this.temp3 = (byte) Integer.parseInt(temp3);//
+        this.temperatures.tempA.add(new Temp((byte) Integer.parseInt(temp1)));
+        this.temperatures.tempA.add(new Temp((byte) Integer.parseInt(temp2)));
+        this.temperatures.tempA.add(new Temp((byte) Integer.parseInt(temp3)));
 
-        this.temp2_1 = (byte) Integer.parseInt(temp2_1);//
-        this.temp2_2 = (byte) Integer.parseInt(temp2_2);//
-        this.temp2_3 = (byte) Integer.parseInt(temp2_3);//
+        this.temperatures.tempB.add(new Temp((byte) Integer.parseInt(temp2_1)));
+        this.temperatures.tempB.add(new Temp((byte) Integer.parseInt(temp2_2)));
+        this.temperatures.tempB.add(new Temp((byte) Integer.parseInt(temp2_3)));
 
-        this.temp_pcb1 = temp_pcb1;
-        this.temp_pcb2 = temp_pcb2;
-        this.temp_pcb3 = temp_pcb3;
+        this.temperatures.tempPCB.add(stringToTemp(temp_pcb1));
+        this.temperatures.tempPCB.add(stringToTemp(temp_pcb2));
+        this.temperatures.tempPCB.add(stringToTemp(temp_pcb3));
 
-        this.temp_chip1 = temp_chip1;
-        this.temp_chip2 = temp_chip2;
-        this.temp_chip3 = temp_chip3;
+        this.temperatures.tempChip.add(stringToTemp(temp_chip1));
+        this.temperatures.tempChip.add(stringToTemp(temp_chip2));
+        this.temperatures.tempChip.add(stringToTemp(temp_chip3));
 
         this.total_rateideal = (int)(Double.parseDouble(total_rateideal) * 1000);
         this.total_rate = (int)(Double.parseDouble(total_rate) * 1000);
@@ -168,13 +150,13 @@ public class Hardware {
         this.chain_acs2 = chain_acs2;
         this.chain_acs3 = chain_acs3;
 
-        this.chain_hw1 = chain_hw1 == null ? 0 : Integer.parseInt(chain_hw1);
-        this.chain_hw2 = chain_hw2 == null ? 0 : Integer.parseInt(chain_hw2);
-        this.chain_hw3 = chain_hw3 == null ? 0 : Integer.parseInt(chain_hw3);
+        this.chainHWS.add(new ChainHW(chain_hw1 == null ? 0 : Integer.parseInt(chain_hw1)));
+        this.chainHWS.add(new ChainHW(chain_hw2 == null ? 0 : Integer.parseInt(chain_hw2)));
+        this.chainHWS.add(new ChainHW(chain_hw3 == null ? 0 : Integer.parseInt(chain_hw3)));
 
-        this.chain_rate1 = chain_rate1== null ? 0 : (int)(Double.parseDouble(chain_rate1) * 1000);
-        this.chain_rate2 = chain_rate2== null ? 0 : (int)(Double.parseDouble(chain_rate2) * 1000);
-        this.chain_rate3 = chain_rate3== null ? 0 : (int)(Double.parseDouble(chain_rate3) * 1000);
+        this.rates.add(new ChainRate(chain_rate1== null ? 0 : (int)(Double.parseDouble(chain_rate1) * 1000)));
+        this.rates.add(new ChainRate(chain_rate2== null ? 0 : (int)(Double.parseDouble(chain_rate2) * 1000)));
+        this.rates.add(new ChainRate(chain_rate3== null ? 0 : (int)(Double.parseDouble(chain_rate3) * 1000)));
 
         this.freq1 = Integer.parseInt(freq1.split("\\.")[0]);
         this.freq2 = Integer.parseInt(freq2.split("\\.")[0]);
@@ -189,68 +171,12 @@ public class Hardware {
         return GHS_av;
     }
 
-    public short getFan1() {
-        return fan1;
+    public List<Fan> getFans() {
+        return fans;
     }
 
-    public short getFan2() {
-        return fan2;
-    }
-
-    public short getFan3() {
-        return fan3;
-    }
-
-    public short getFan4() {
-        return fan4;
-    }
-
-    public byte getTemp1() {
-        return temp1;
-    }
-
-    public byte getTemp2() {
-        return temp2;
-    }
-
-    public byte getTemp3() {
-        return temp3;
-    }
-
-    public byte getTemp2_1() {
-        return temp2_1;
-    }
-
-    public byte getTemp2_2() {
-        return temp2_2;
-    }
-
-    public byte getTemp2_3() {
-        return temp2_3;
-    }
-
-    public String getTemp_pcb1() {
-        return temp_pcb1;
-    }
-
-    public String getTemp_pcb2() {
-        return temp_pcb2;
-    }
-
-    public String getTemp_pcb3() {
-        return temp_pcb3;
-    }
-
-    public String getTemp_chip1() {
-        return temp_chip1;
-    }
-
-    public String getTemp_chip2() {
-        return temp_chip2;
-    }
-
-    public String getTemp_chip3() {
-        return temp_chip3;
+    public Temperatures getTemperatures() {
+        return temperatures;
     }
 
     public int getTotal_rateideal() {
@@ -285,28 +211,12 @@ public class Hardware {
         return chain_acs3;
     }
 
-    public int getChain_hw1() {
-        return chain_hw1;
+    public List<ChainHW> getChainHWS() {
+        return chainHWS;
     }
 
-    public int getChain_hw2() {
-        return chain_hw2;
-    }
-
-    public int getChain_hw3() {
-        return chain_hw3;
-    }
-
-    public int getChain_rate1() {
-        return chain_rate1;
-    }
-
-    public int getChain_rate2() {
-        return chain_rate2;
-    }
-
-    public int getChain_rate3() {
-        return chain_rate3;
+    public List<ChainRate> getRates() {
+        return rates;
     }
 
     public int getFreq1() {
@@ -327,5 +237,17 @@ public class Hardware {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    private static List<Temp> stringToTemp(String inStr)
+    {
+        String[] temps = inStr.split("-");
+        List<Temp> temps1 = new ArrayList<>();
+
+        for (String dd : temps)
+        {
+            temps1.add(new Temp( (byte) Integer.parseInt(dd)));
+        }
+        return temps1;
     }
 }
